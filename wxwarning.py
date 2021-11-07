@@ -23,6 +23,7 @@ import datetime as dt
 
 # warnings: set to True to plot weather warnings intead (smaller)
 ### NOTE: this may not work if there are no current weather warnings
+#warnings = True
 warnings = False
 
 #streamlit message size
@@ -51,9 +52,9 @@ if (warnings):
     os.chdir('current_warnings')
     os.system('rm -rf current_*')
     url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_warnings.tar.gz'
-    os.system('wget https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_warnings.tar.gz')
-    os.system('tar -xvzf current_warnings.tar.gz')
-    os.system('rm -rf current_warnings.tar.gz wget-log')
+    os.system('wget -q https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_warnings.tar.gz')
+    os.system('tar -xzf current_warnings.tar.gz')
+    os.system('rm -rf current_warnings.tar.gz')
 else:
     if (os.path.isdir('current_all') == False ):
         os.mkdir('current_all')
@@ -62,12 +63,12 @@ else:
     os.chdir('current_all')
     os.system('rm -rf current_*')
     url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz'
-    os.system('wget https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz')
-    os.system('tar -xvzf current_all.tar.gz')
-    os.system('rm -rf current_all.tar.gz wget-log')
+    os.system('wget -q https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz')
+    os.system('tar -xzf current_all.tar.gz')
+    os.system('rm -rf current_all.tar.gz')
 
 
-os.system('ls -lh')
+#os.system('ls -lh')
 os.chdir('..')
 
 #Back in parent directory, Read in weather info.  Read in current_warnings
@@ -168,4 +169,4 @@ mbr.save('wxwarning.html')
 
 #str.write('Done')
 
-os.system('ls -lh')
+#os.system('ls -lh')
