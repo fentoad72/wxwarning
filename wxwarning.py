@@ -26,6 +26,10 @@ import datetime as dt
 #warnings = True
 warnings = False
 
+#newdata: set to False for streamlit app which cannot download data
+newdata = False
+#newdata = True
+
 #streamlit message size
 MESSAGE_SIZE_LIMIT = 300.*int(1e6) #300 MB
 
@@ -37,39 +41,43 @@ if (warnings):
 else:
     str.title('Current U.S. Weather Statements')
 
-str.header(timestamp[0:10]+' '+timestamp[11:16]+' UTC')
+if newdata:
+    str.header(timestamp[0:10]+' '+timestamp[11:16]+' UTC')
+else:
+    str.header('Sample Map')
 
 
 #get latest wx warnings from NWS
 home = os.getcwd()
 #str.write('home:',home)
 
+if not(newdata):
 # Check for existence of current_all directory; if it doesn't exist, create it
-if (warnings):
-    if (os.path.isdir('current_warnings') == False ):
-        os.mkdir('current_warnings')
+    if (warnings):
+        if (os.path.isdir('current_warnings') == False ):
+            os.mkdir('current_warnings')
 # download latest shapefile and unpack
-    os.chdir('current_warnings')
-    os.system('rm -rf current_*')
-    url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_warnings.tar.gz'
-    os.system('wget -q https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_warnings.tar.gz')
-    os.system('tar -xzf current_warnings.tar.gz')
-    os.system('rm -rf current_warnings.tar.gz')
-else:
-    if (os.path.isdir('current_all') == False ):
-        os.mkdir('current_all')
-#       str.write('created current_all')
+        os.chdir('current_warnings')
+        os.system('rm -rf current_*')
+        url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_warnings.tar.gz'
+        os.system('wget -q https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_warnings.tar.gz')
+        os.system('tar -xzf current_warnings.tar.gz')
+        os.system('rm -rf current_warnings.tar.gz')
+    else:
+        if (os.path.isdir('current_all') == False ):
+            os.mkdir('current_all')
+#           str.write('created current_all')
 # cd into current_all and clear it out
-    os.chdir('current_all')
-    os.system('rm -rf current_*')
-    url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz'
-    os.system('wget -q https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz')
-    os.system('tar -xzf current_all.tar.gz')
-    os.system('rm -rf current_all.tar.gz')
+        os.chdir('current_all')
+        os.system('rm -rf current_*')
+        url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz'
+        os.system('wget -q https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz')
+        os.system('tar -xzf current_all.tar.gz')
+        os.system('rm -rf current_all.tar.gz')
 
 
-#os.system('ls -lh')
-os.chdir('..')
+#    os.system('ls -lh')
+    os.chdir('..')
 
 #Back in parent directory, Read in weather info.  Read in current_warnings
 # to test with a small shapefile
