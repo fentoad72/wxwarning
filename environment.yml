@@ -113,6 +113,7 @@ dependencies:
   - json-c=0.15=hcb556a6_0
   - json5=0.9.5=pyh9f0ad1d_0
   - jsonschema=4.0.1=pyhd8ed1ab_0
+  - jupyter_client=7.0.1=pyhd3eb1b0_0
   - jupyter_core=4.8.1=py39h6e9494a_0
   - jupyter_server=1.11.1=pyhd8ed1ab_0
   - jupyterlab=3.1.17=pyhd8ed1ab_0
@@ -278,8 +279,6 @@ dependencies:
   - spvcm=0.3.0=py_0
   - sqlite=3.36.0=h23a322b_2
   - statsmodels=0.13.0=py39hc89836e_0
-  - streamlit=0.84.1=pyhd8ed1ab_0
-  - streamlit-folium=0.4.0=pyhd8ed1ab_0
   - sympy=1.8=py39h6e9494a_0
   - terminado=0.12.1=py39h6e9494a_0
   - testpath=0.5.0=pyhd8ed1ab_0
@@ -360,6 +359,8 @@ dependencies:
     - ratelim==0.1.6
     - rsa==4.7.2
     - sankee==0.0.5
+    - streamlit==1.1.0
+    - streamlit-folium==0.4.0
     - tenacity==8.0.1
     - traittypes==0.2.1
     - uritemplate==3.0.1
