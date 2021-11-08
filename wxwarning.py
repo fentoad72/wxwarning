@@ -29,7 +29,7 @@ warnings = False
 
 #newdata: set to False for streamlit app which cannot download data
 newdata = False
-#newdata = True
+newdata = True
 
 #streamlit message size
 MESSAGE_SIZE_LIMIT = 300.*int(1e6) #300 MB
