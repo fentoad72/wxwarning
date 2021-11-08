@@ -65,8 +65,8 @@ if (newdata == True):
     os.system('tar -xzf current_all.tar.gz')
     os.system('rm -rf current_all.tar.gz')
 else:
-    #str.write('os files:',os.listdir('current_all/'))
-    os.chdir('./current_all')
+    str.write('os files:',os.listdir('current_all/'))
+    os.chdir('current_all')
 
 
 #    os.system('ls -lh')
@@ -74,7 +74,7 @@ else:
 # Read in weather info.  Read in current_warnings to test with a small shapefile
 filepath = './current_all.shp'
 if path.Path(filepath).exists():
-    #str.write(filepath,' exists')
+    str.write(filepath,' exists')
     weatherdf = gpd.read_file(filepath)
 #   str.write(weatherdf.head())
 else:
