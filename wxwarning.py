@@ -24,7 +24,7 @@ import datetime as dt
 
 #newdata: set to False for streamlit app which cannot download data
 newdata = False
-newdata = True
+#newdata = True
 
 #streamlit message size
 MESSAGE_SIZE_LIMIT = 300.*int(1e6) #300 MB
@@ -42,22 +42,22 @@ else:
 #get latest wx warnings from NWS
 home = path.PurePath('.')
 #os.chdir(home)
-str.write('home:',home)
-str.write('os files home:',os.listdir('.'))
+#str.write('home:',home)
+#str.write('os files home:',os.listdir('.'))
 
 #list files
 p = path.Path(home).glob('current_all/*')
 files = [x for x in p if x.is_file()]
-str.write('pathlib files current_all:',files)
+#str.write('pathlib files current_all:',files)
 
 if (newdata == True):
 # Get latest wx warnings from NWS
 # Check for existence of current_all directory; if it doesn't exist, create it
     if (os.path.isdir('current_all') == False ):
         os.mkdir('current_all')
-        str.write('created current_all')
+        #str.write('created current_all')
 # cd into current_all and clear it out
-    str.write('os files current_all:',os.listdir('current_all/'))
+    #str.write('os files current_all:',os.listdir('current_all/'))
     os.chdir('current_all')
     os.system('rm -rf current_*')
     url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz'
@@ -65,7 +65,7 @@ if (newdata == True):
     os.system('tar -xzf current_all.tar.gz')
     os.system('rm -rf current_all.tar.gz')
 else:
-    str.write('os files:',os.listdir('current_all/'))
+    #str.write('os files:',os.listdir('current_all/'))
     os.chdir('current_all')
 
 
@@ -74,7 +74,7 @@ else:
 # Read in weather info.  Read in current_warnings to test with a small shapefile
 filepath = './current_all.shp'
 if path.Path(filepath).exists():
-    str.write(filepath,' exists')
+    #str.write(filepath,' exists')
     weatherdf = gpd.read_file(filepath)
 #   str.write(weatherdf.head())
 else:
