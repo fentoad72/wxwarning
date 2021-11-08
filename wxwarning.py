@@ -90,7 +90,7 @@ else:
         str.write(filepath,' exists')
         weatherdf = gpd.read_file('current_all/current_all.shp')
         str.write(weatherdf.head())
-    else
+    else:
         str.write(filepath,' not found')
         exit()
      
