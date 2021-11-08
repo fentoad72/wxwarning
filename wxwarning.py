@@ -18,6 +18,7 @@ import folium as fl
 import streamlit_folium as sf
 import branca.colormap as cm
 import os as os
+import pathlib as path
 import tarfile
 import datetime as dt
 
@@ -41,17 +42,17 @@ if (warnings):
 else:
     str.title('Current U.S. Weather Statements')
 
-if newdata:
+if (newdata == True):
     str.header(timestamp[0:10]+' '+timestamp[11:16]+' UTC')
 else:
     str.header('Sample Map')
 
 
 #get latest wx warnings from NWS
-home = os.getcwd()
-#str.write('home:',home)
+home = path.PurePath('.')
+str.write('home:',home)
 
-if not(newdata):
+if (newdata == False):
 # Check for existence of current_all directory; if it doesn't exist, create it
     if (warnings):
         if (os.path.isdir('current_warnings') == False ):
@@ -84,9 +85,13 @@ if not(newdata):
 if (warnings):
     weatherdf = gpd.read_file('current_warnings/current_warnings.shp')
 else:
-    weatherdf = gpd.read_file('current_all/current_all.shp')
+    filepath = './current_all/current_all.shp'
+    if path.Path(filepath).exists():
+        str.write(filepath,' exists')
+        weatherdf = gpd.read_file('current_all/current_all.shp')
+        str.write(weatherdf.head())
+     
 
-#str.write(weatherdf.head())
 
 # drop unnecessary columns from geodataframe
 weatherdf = weatherdf.drop(columns=['PHENOM','SIG','WFO','EVENT','ONSET','ENDS','CAP_ID','MSG_TYPE','VTEC'])
