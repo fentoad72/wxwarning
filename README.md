@@ -15,6 +15,4 @@ current_warning/ - directory containing ArcGIS info for NWS warnings only (much 
 weatherdf.geoson - geojson file created by wxwarning.py, contains weatherdf geodataframe
 wxwarning.html - html page created by wxwarning.py contaning the interactive map
 
-In wxwarning.py, set warnings = True to only plot NWS weather warnings, not all statements.  Note: this may not work if there are no current warnings.
-
 In wxwarning.ph, newdata is set to False by default because Streamlit.io won't allow downloading data.  Set to true to get latest NWS updates (but not on Streamlit App)
