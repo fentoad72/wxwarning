@@ -66,7 +66,7 @@ if (newdata == True):
     os.system('rm -rf current_all.tar.gz')
 else:
     #str.write('os files:',os.listdir('current_all/'))
-    os.chdir('current_all')
+    os.chdir('./current_all')
 
 
 #    os.system('ls -lh')
