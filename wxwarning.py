@@ -55,7 +55,7 @@ str.write('home:',home)
 p = path.Path(home).glob('./current_*/*')
 files = [x for x in p if x.is_file()]
 str.write('pathlib files:',files)
-str.write('os files:',os.listdir(home))
+str.write('os files:',os.listdir('current_all/'))
 
 if (newdata == False):
 # Check for existence of current_all directory; if it doesn't exist, create it
@@ -90,7 +90,7 @@ if (newdata == False):
 if (warnings):
     weatherdf = gpd.read_file('current_warnings/current_warnings.shp')
 else:
-    filepath = './current_all/current_all.shp'
+    filepath = 'current_all/current_all.shp'
     if path.Path(filepath).exists():
         str.write(filepath,' exists')
         weatherdf = gpd.read_file('current_all/current_all.shp')
