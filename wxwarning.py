@@ -19,7 +19,6 @@ import streamlit_folium as sf
 import branca.colormap as cm
 import os as os
 import pathlib as path
-import tarfile
 import datetime as dt
 
 #newdata: set to False for streamlit app which cannot download data
@@ -54,8 +53,8 @@ if (newdata == True):
 # Get latest wx warnings from NWS
 # Check for existence of current_all directory; if it doesn't exist, create it
     if (os.path.isdir('current_all') == False ):
-        os.mkdir('current_all')
-        #str.write('created current_all')
+        os.mkdir('./current_all')
+        str.write('created current_all')
 # cd into current_all and clear it out
     #str.write('os files current_all:',os.listdir('current_all/'))
     os.chdir('current_all')
@@ -64,10 +63,10 @@ if (newdata == True):
     os.system('wget -q https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz')
     os.system('tar -xzf current_all.tar.gz')
     os.system('rm -rf current_all.tar.gz')
+#   str.write('os files current_all:',os.listdir('current_all/'))
 else:
     #str.write('os files:',os.listdir('current_all/'))
     os.chdir('current_all')
-
 
 #    os.system('ls -lh')
 
