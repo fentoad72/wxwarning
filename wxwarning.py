@@ -51,6 +51,10 @@ else:
 #get latest wx warnings from NWS
 home = path.PurePath('.')
 str.write('home:',home)
+#list files
+p = path.Path(home).glob('**/*')
+files = [x for x in p if x.is_file()]
+str.write('files:',files)
 
 if (newdata == False):
 # Check for existence of current_all directory; if it doesn't exist, create it
