@@ -52,7 +52,7 @@ else:
 home = path.PurePath('.')
 str.write('home:',home)
 #list files
-p = path.Path(home).glob('**/*')
+p = path.Path(home).glob('./current_*/*')
 files = [x for x in p if x.is_file()]
 str.write('files:',files)
 
