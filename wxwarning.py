@@ -54,7 +54,8 @@ str.write('home:',home)
 #list files
 p = path.Path(home).glob('./current_*/*')
 files = [x for x in p if x.is_file()]
-str.write('files:',files)
+str.write('pathlib files:',files)
+str.write('os files:',os.listdir(home))
 
 if (newdata == False):
 # Check for existence of current_all directory; if it doesn't exist, create it
