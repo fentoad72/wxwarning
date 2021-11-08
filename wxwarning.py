@@ -52,12 +52,12 @@ else:
 home = path.PurePath('.')
 str.write('home:',home)
 #list files
-p = path.Path(home).glob('./current_*/*')
+p = path.Path(home).glob('current_all/*')
 files = [x for x in p if x.is_file()]
 str.write('pathlib files:',files)
 str.write('os files:',os.listdir('current_all/'))
 
-if (newdata == False):
+if (newdata == True):
 # Check for existence of current_all directory; if it doesn't exist, create it
     if (warnings):
         if (os.path.isdir('current_warnings') == False ):
@@ -80,26 +80,27 @@ if (newdata == False):
         os.system('wget -q https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz')
         os.system('tar -xzf current_all.tar.gz')
         os.system('rm -rf current_all.tar.gz')
+else:
+    os.chdir('current_all')
 
 
 #    os.system('ls -lh')
-    os.chdir('..')
 
-#Back in parent directory, Read in weather info.  Read in current_warnings
-# to test with a small shapefile
+# Read in weather info.  Read in current_warnings to test with a small shapefile
 if (warnings):
     weatherdf = gpd.read_file('current_warnings/current_warnings.shp')
 else:
-    filepath = 'current_all/current_all.shp'
+    filepath = './current_all.shp'
     if path.Path(filepath).exists():
         str.write(filepath,' exists')
-        weatherdf = gpd.read_file('current_all/current_all.shp')
+        weatherdf = gpd.read_file(filepath)
         str.write(weatherdf.head())
     else:
         str.write(filepath,' not found')
         exit()
      
 
+    os.chdir('..')
 
 # drop unnecessary columns from geodataframe
 weatherdf = weatherdf.drop(columns=['PHENOM','SIG','WFO','EVENT','ONSET','ENDS','CAP_ID','MSG_TYPE','VTEC'])
