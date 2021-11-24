@@ -28,6 +28,7 @@ import requests
 import zipfile
 import tarfile
 from io import BytesIO
+import wget
 import datetime as dt
 
 st.write('loaded 9 modules')
@@ -59,23 +60,32 @@ os.chdir(DOWNLOADS_PATH)
 url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz'
 st.write('downloading NWS file')
 
-response=requests.get(url,stream=True)
-with tarfile.open(fileobj=BytesIO(response.raw.read()), mode="r:gz") as tar_file:
-    for member in tar_file.getmembers():
-        f= tar_file.extractfile(member)
-        if (f == 'current_all.shp'):
-            weatherdf = gpd.read_file(f)
-            st.write(weatherdf.head())
+# response=requests.get(url,stream=True)
+# with tarfile.open(fileobj=BytesIO(response.raw.read()), mode="r:gz") as tar_file:
+#     for member in tar_file.getmembers():
+#         st.write(type(member))
+#         st.write('member=',member)
+#         f= tar_file.extractfile(member)
+#         st.write('f=',f)
+#         weatherdf = gpd.read_file(f)
+#         st.write(weatherdf.head())
 
 
 #os.system('wget https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz')
-#wxfile = wget.download(url)
-#os.system('tar -xvzf current_all.tar.gz')
-#os.system('ls -l')
-#os.chdir('../..')
+os.system('rm -rf *.gz')
+files = os.system('ls -l')
+st.write(files)
+
+st.write('attempted wget')
+wxfile = wget.download(url)
+st.write('wxfile=',wxfile)
+
+os.system('tar -xvzf current_all.tar.gz')
+files = os.system('ls -l *')
+st.write(files)
 
 os.getcwd()
-os.system('ls -l *')
+
 
 # get the current time in UTC (constant reference timezone)
 timestamp = dt.datetime.now(dt.timezone.utc).isoformat(timespec='minutes')
