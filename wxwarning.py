@@ -31,11 +31,11 @@ from io import BytesIO
 import wget
 import datetime as dt
 
-st.write('loaded 9 modules')
+#st.write('loaded 9 modules')
 
 HOME = os.getcwd()
 
-st.write('HOME:',HOME)
+#st.write('HOME:',HOME)
 
 
 #newdata: set to False for streamlit app which cannot download data
@@ -46,7 +46,8 @@ newdata = True
 MESSAGE_SIZE_LIMIT = 500.*int(1e6) #500 MB
 
 STREAMLIT_STATIC_PATH = pathlib.Path(st.__path__[0]) / "static"
-st.write('STR_STATIC_PATH:',STREAMLIT_STATIC_PATH)
+#st.write('STR_STATIC_PATH:',STREAMLIT_STATIC_PATH)
+
 # We create a downloads directory within the streamlit static asset directory
 # and we write output files to it
 DOWNLOADS_PATH = STREAMLIT_STATIC_PATH / "downloads"
@@ -58,45 +59,29 @@ os.chdir(DOWNLOADS_PATH)
 #os.chdir('current_all')
 #os.system('rm -rf current_*')
 url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz'
-st.write('downloading NWS file')
+#st.write('downloading NWS file')
 
-# response=requests.get(url,stream=True)
-# with tarfile.open(fileobj=BytesIO(response.raw.read()), mode="r:gz") as tar_file:
-#     for member in tar_file.getmembers():
-#         st.write(type(member))
-#         st.write('member=',member)
-#         f= tar_file.extractfile(member)
-#         st.write('f=',f)
-#         weatherdf = gpd.read_file(f)
-#         st.write(weatherdf.head())
-
-
-#os.system('wget https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz')
-os.system('rm -rf *.gz')
-files = os.system('ls -l')
-st.write(files)
-
-st.write('attempted wget')
+#st.write('attempted wget')
 wxfile = wget.download(url)
-st.write('wxfile=',wxfile)
+#st.write('wxfile=',wxfile)
 
 os.system('tar -xvzf current_all.tar.gz')
 files = os.system('ls -l *')
-st.write(files)
+#st.write(files)
 
 os.getcwd()
 
 
 # get the current time in UTC (constant reference timezone)
 timestamp = dt.datetime.now(dt.timezone.utc).isoformat(timespec='minutes')
-st.write(timestamp[0:10], timestamp[11:16],'UTC')
+#st.write(timestamp[0:10], timestamp[11:16],'UTC')
 
-st.write('DOWNLOADS_PATH',DOWNLOADS_PATH)
+#st.write('DOWNLOADS_PATH',DOWNLOADS_PATH)
 
 #Read in weather info
 
 infile = str(DOWNLOADS_PATH) + '/current_all.shp'
-st.write(infile)
+#st.write(infile)
 
 weatherdf = gpd.read_file(infile)
 
@@ -104,7 +89,7 @@ weatherdf = gpd.read_file(infile)
 
 weatherdf = weatherdf.drop(columns=['PHENOM','SIG','WFO','EVENT','ONSET','ENDS','CAP_ID','MSG_TYPE','VTEC'])
 
-st.write(weatherdf.head())
+#st.write(weatherdf.head())
 
 
 st.title('Current U.S. Weather Statements')
@@ -131,7 +116,7 @@ for w in weatherdf['PROD_TYPE'].unique():
 #    print(w,k)
     k += 10
 
-st.write(wxwarnings)
+#st.write(wxwarnings)
 
 #Get min and max values of wxwarning id codes
 all_values = wxwarnings.values()
@@ -139,7 +124,7 @@ all_values = wxwarnings.values()
 max_wxwarnings = max(all_values)
 min_wxwarnings = min(all_values)
 
-st.write('wxwarnings:',min_wxwarnings,max_wxwarnings)
+#st.write('wxwarnings:',min_wxwarnings,max_wxwarnings)
 
 # Now create an column PROD_ID which duplicates PROD_TYPE
 weatherdf["PROD_ID"]=weatherdf['PROD_TYPE']
@@ -147,7 +132,7 @@ weatherdf["PROD_ID"]=weatherdf['PROD_TYPE']
 # and fill with values from the dictionary wxwarnings
 weatherdf['PROD_ID'].replace(wxwarnings,inplace=True)
 
-st.write(weatherdf.head())
+#st.write(weatherdf.head())
 
 #verify no missing/Nan
 weatherdf.isnull().sum().sum()
@@ -155,12 +140,12 @@ weatherdf.isnull().sum().sum()
 #explicitly create an index column with each entry having a unique value for indexing
 weatherdf['UNIQUE_ID']=weatherdf.index
 
-st.write(weatherdf.head(10))
+#st.write(weatherdf.head(10))
 
 # write weatherdf to a geoJson file
 weatherdf.to_file("weatherdf.geojson", driver='GeoJSON')
 
-st.write('wrote GeoJSON file')
+#st.write('wrote GeoJSON file')
 
 # Use branca.colormap instead of choropleth
 
@@ -196,7 +181,7 @@ fl.GeoJson(weatherdf,
               ).add_to(mbr)
 
 # Add minimap
-MiniMap(tile_layer='stamenterrain',zoom_level_offset=-3).add_to(mbr)
+MiniMap(tile_layer='stamenterrain',zoom_level_offset=-4).add_to(mbr)
 
 
 
