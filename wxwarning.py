@@ -56,6 +56,7 @@ os.chdir(DOWNLOADS_PATH)
 #os.chdir('current_all')
 os.system('rm -rf current_*')
 url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz'
+st.write('downloading NWS file')
 os.system('wget https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz')
 #wxfile = wget.download(url)
 os.system('tar -xvzf current_all.tar.gz')
@@ -73,7 +74,7 @@ st.write('DOWNLOADS_PATH',DOWNLOADS_PATH)
 
 #Read in weather info
 
-infile = 'current_all.shp'
+infile = str(DOWNLOADS_PATH) + '/current_all.shp'
 st.write(infile)
 
 weatherdf = gpd.read_file(infile)
@@ -144,7 +145,7 @@ st.write('wrote GeoJSON file')
 
 
 #create a b/w map of CONUS
-mbr = fl.Map(location=[45.0,-95.0],zoom_start=4,tiles="Stamen Toner")
+mbr = fl.Map(location=[40.0,-95.0],zoom_start=4,tiles="Stamen Toner")
 
 colormap = cm.linear.Set1_09.scale(min_wxwarnings,max_wxwarnings).to_step(len(set(weatherdf['PROD_ID'])))
 
