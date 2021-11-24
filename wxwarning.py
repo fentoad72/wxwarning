@@ -181,7 +181,7 @@ fl.GeoJson(weatherdf,
               ).add_to(mbr)
 
 # Add minimap
-MiniMap(tile_layer='stamenterrain',zoom_level_offset=-4).add_to(mbr)
+MiniMap(tile_layer='stamenterrain',zoom_level_offset=-5).add_to(mbr)
 
 
 
