@@ -54,7 +54,7 @@ if not DOWNLOADS_PATH.is_dir():
 #get latest wx warnings from NWS
 os.chdir(DOWNLOADS_PATH)
 #os.chdir('current_all')
-os.system('rm -rf current_*')
+#os.system('rm -rf current_*')
 url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz'
 st.write('downloading NWS file')
 os.system('wget https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz')
