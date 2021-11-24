@@ -27,6 +27,7 @@ import json
 import requests
 import zipfile
 import tarfile
+from io import BytesIO
 import datetime as dt
 
 st.write('loaded 9 modules')
@@ -57,10 +58,20 @@ os.chdir(DOWNLOADS_PATH)
 #os.system('rm -rf current_*')
 url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz'
 st.write('downloading NWS file')
-os.system('wget https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz')
+
+response=requests.get(url,stream=True)
+with tarfile.open(fileobj=BytesIO(response.raw.read()), mode="r:gz") as tar_file:
+    for member in tar_file.getmembers():
+        f= tar_file.extractfile(member)
+        if (f == 'current_all.shp'):
+            weatherdf = gpd.read_file(f)
+            st.write(weatherdf.head())
+
+
+#os.system('wget https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz')
 #wxfile = wget.download(url)
-os.system('tar -xvzf current_all.tar.gz')
-os.system('ls -l')
+#os.system('tar -xvzf current_all.tar.gz')
+#os.system('ls -l')
 #os.chdir('../..')
 
 os.getcwd()
