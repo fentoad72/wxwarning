@@ -33,7 +33,7 @@ st.write('loaded 9 modules')
 
 HOME = os.getcwd()
 
-st.write(HOME)
+st.write('HOME:',HOME)
 
 
 #newdata: set to False for streamlit app which cannot download data
@@ -44,7 +44,7 @@ newdata = True
 MESSAGE_SIZE_LIMIT = 500.*int(1e6) #500 MB
 
 STREAMLIT_STATIC_PATH = pathlib.Path(st.__path__[0]) / "static"
-st.write(STREAMLIT_STATIC_PATH)
+st.write('STR_STATIC_PATH:',STREAMLIT_STATIC_PATH)
 # We create a downloads directory within the streamlit static asset directory
 # and we write output files to it
 DOWNLOADS_PATH = STREAMLIT_STATIC_PATH / "downloads"
@@ -69,7 +69,7 @@ os.system('ls -l *')
 timestamp = dt.datetime.now(dt.timezone.utc).isoformat(timespec='minutes')
 st.write(timestamp[0:10], timestamp[11:16],'UTC')
 
-st.write(DOWNLOADS_PATH)
+st.write('DOWNLOADS_PATH',DOWNLOADS_PATH)
 
 #Read in weather info
 
