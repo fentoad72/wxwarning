@@ -35,7 +35,7 @@ import datetime as dt
 
 HOME = os.getcwd()
 
-#st.write('HOME:',HOME)
+st.write('HOME:',HOME)
 
 
 #newdata: set to False for streamlit app which cannot download data
@@ -57,25 +57,25 @@ if not DOWNLOADS_PATH.is_dir():
 #get latest wx warnings from NWS
 os.chdir(DOWNLOADS_PATH)
 #os.chdir('current_all')
-#os.system('rm -rf current_*')
+os.system('rm -rf current_* wget*')
 url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz'
 #st.write('downloading NWS file')
 
-#st.write('attempted wget')
 wxfile = wget.download(url)
 #st.write('wxfile=',wxfile)
 
 os.system('tar -xvzf current_all.tar.gz')
-files = os.system('ls -l *')
+os.remove('current_all.tar.gz')
+#files = os.system('ls -l *')
 #st.write(files)
 
+os.chdir(HOME)
 os.getcwd()
 
 
 # get the current time in UTC (constant reference timezone)
 timestamp = dt.datetime.now(dt.timezone.utc).isoformat(timespec='minutes')
 #st.write(timestamp[0:10], timestamp[11:16],'UTC')
-
 #st.write('DOWNLOADS_PATH',DOWNLOADS_PATH)
 
 #Read in weather info
@@ -143,8 +143,7 @@ weatherdf['UNIQUE_ID']=weatherdf.index
 #st.write(weatherdf.head(10))
 
 # write weatherdf to a geoJson file
-weatherdf.to_file("weatherdf.geojson", driver='GeoJSON')
-
+#weatherdf.to_file("weatherdf.geojson", driver='GeoJSON')
 #st.write('wrote GeoJSON file')
 
 # Use branca.colormap instead of choropleth
@@ -195,6 +194,6 @@ if os.path.exists('wxwarning.html'):
     
 mbr.save('wxwarning.html')
 
-st.write('Done')
+#st.write('Done')
 
 #os.system('ls -lh')
