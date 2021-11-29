@@ -20,14 +20,11 @@ import streamlit_folium as sf
 import branca.colormap as cm
 import os as os
 import pathlib
-import base64
 import re
 import random
 import json
 import requests
-import zipfile
 import tarfile
-from io import BytesIO
 import wget
 import datetime as dt
 
