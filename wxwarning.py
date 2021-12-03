@@ -33,7 +33,7 @@ import datetime as dt
 
 HOME = os.getcwd()
 
-st.write('HOME:',HOME)
+#st.write('HOME:',HOME)
 
 def get_confirm_token(response):
     for key, value in response.cookies.items():
@@ -48,7 +48,7 @@ def save_response_content(response,destination):
     with open(destination,"wb") as f:
         for chunk in response.iter_content(CHUNK_SIZE):
             if chunk:
-                st.write('Chunk:',i)
+#                st.write('Chunk:',i)
                 f.write(chunk)
                 i += 1
 
@@ -68,13 +68,13 @@ DOWNLOADS_PATH = STREAMLIT_STATIC_PATH / "downloads"
 if not DOWNLOADS_PATH.is_dir():
     DOWNLOADS_PATH.mkdir()
 
-st.write(str(DOWNLOADS_PATH))
+#st.write(str(DOWNLOADS_PATH))
 #get latest wx warnings from NWS
 #os.chdir(DOWNLOADS_PATH)
 #os.chdir('current_all')
 os.system('rm -rf ' + str(DOWNLOADS_PATH) + '/current_* ' + str(DOWNLOADS_PATH) + '/wget*')
 url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz'
-st.write('downloading NWS file')
+#st.write('downloading NWS file')
 
 session = requests.Session()
 
@@ -87,11 +87,11 @@ if token:
 
 destination =  str(DOWNLOADS_PATH)+'/current_all.tar.gz'
 
-st.write(destination)
+#st.write(destination)
 
 save_response_content(response,destination)
 
-st.write(destination)
+#st.write(destination)
 
 #wxfile = wget.download(url)
 #st.write('wxfile=',wxfile)
@@ -99,15 +99,15 @@ st.write(destination)
 command = 'tar -xvzf '+ destination
 #st.write(command)
 #os.system(command)
-st.write('type=',type(destination))
+#st.write('type=',type(destination))
 
 wxdata = tarfile.open(name=destination)
 
-st.write('type=',type(wxdata))
+#st.write('type=',type(wxdata))
 
 wxdata.list(verbose=True)
 
-st.write('contents:',wxdata.list(verbose=True))
+#st.write('contents:',wxdata.list(verbose=True))
 
 os.mkdir(str(DOWNLOADS_PATH)+'/current_all')
 
@@ -115,7 +115,7 @@ wxdata.extractall(path=str(DOWNLOADS_PATH)+'/current_all/')
 
 #os.remove(str(DOWNLOADS_PATH)+'/current_all.tar.gz')
 files = os.system('ls -l '+ str(DOWNLOADS_PATH))
-st.write(files)
+#st.write(files)
 
 #os.chdir(HOME)
 os.getcwd()
