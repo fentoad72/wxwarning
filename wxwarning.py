@@ -13,6 +13,7 @@
 import numpy as np
 import pandas as pd
 import geopandas as gpd
+from requests.models import ChunkedEncodingError
 import streamlit as st
 import folium as fl
 from folium.plugins import FastMarkerCluster,MarkerCluster,MiniMap
@@ -34,6 +35,22 @@ HOME = os.getcwd()
 
 st.write('HOME:',HOME)
 
+def get_confirm_token(response):
+    for key, value in response.cookies.items():
+        if key.startswith('download_warning'):
+            return value
+
+    return None
+
+def save_response_content(response,destination):
+    CHUNK_SIZE=32768
+    i = 1
+    with open(destination,"wb") as f:
+        for chunk in response.iter_content(CHUNK_SIZE):
+            if chunk:
+                st.write('Chunk:',i)
+                f.write(chunk)
+                i += 1
 
 #newdata: set to False for streamlit app which cannot download data
 newdata = False
@@ -51,22 +68,56 @@ DOWNLOADS_PATH = STREAMLIT_STATIC_PATH / "downloads"
 if not DOWNLOADS_PATH.is_dir():
     DOWNLOADS_PATH.mkdir()
 
+st.write(str(DOWNLOADS_PATH))
 #get latest wx warnings from NWS
-os.chdir(DOWNLOADS_PATH)
+#os.chdir(DOWNLOADS_PATH)
 #os.chdir('current_all')
-os.system('rm -rf current_* wget*')
+os.system('rm -rf ' + str(DOWNLOADS_PATH) + '/current_* ' + str(DOWNLOADS_PATH) + '/wget*')
 url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz'
-#st.write('downloading NWS file')
+st.write('downloading NWS file')
 
-wxfile = wget.download(url)
+session = requests.Session()
+
+response = session.get(url,stream=True)
+token = get_confirm_token(response)
+
+if token:
+    params = {'confirm':token}
+    response = session.get(URL,params=params,stream=True)
+
+destination =  str(DOWNLOADS_PATH)+'/current_all.tar.gz'
+
+st.write(destination)
+
+save_response_content(response,destination)
+
+st.write(destination)
+
+#wxfile = wget.download(url)
 #st.write('wxfile=',wxfile)
 
-os.system('tar -xvzf current_all.tar.gz')
-os.remove('current_all.tar.gz')
-#files = os.system('ls -l *')
-#st.write(files)
+command = 'tar -xvzf '+ destination
+#st.write(command)
+#os.system(command)
+st.write('type=',type(destination))
 
-os.chdir(HOME)
+wxdata = tarfile.open(name=destination)
+
+st.write('type=',type(wxdata))
+
+wxdata.list(verbose=True)
+
+st.write('contents:',wxdata.list(verbose=True))
+
+os.mkdir(str(DOWNLOADS_PATH)+'/current_all')
+
+wxdata.extractall(path=str(DOWNLOADS_PATH)+'/current_all/')
+
+#os.remove(str(DOWNLOADS_PATH)+'/current_all.tar.gz')
+files = os.system('ls -l '+ str(DOWNLOADS_PATH))
+st.write(files)
+
+#os.chdir(HOME)
 os.getcwd()
 
 
@@ -77,7 +128,7 @@ timestamp = dt.datetime.now(dt.timezone.utc).isoformat(timespec='minutes')
 
 #Read in weather info
 
-infile = str(DOWNLOADS_PATH) + '/current_all.shp'
+infile = str(DOWNLOADS_PATH) + '/current_all/current_all.shp'
 #st.write(infile)
 
 weatherdf = gpd.read_file(infile)
@@ -96,7 +147,7 @@ if (newdata == True):
 else:
     st.header('Sample Map')
 
-os.chdir(HOME)
+#os.chdir(HOME)
 os.getcwd()
 os.system('ls -lh')
 
