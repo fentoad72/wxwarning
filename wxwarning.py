@@ -56,7 +56,7 @@ def save_response_content(response,destination):
 newdata = False
 newdata = True
 
-#streamlit message size
+#streamlit message size (doesn't work, need to change server_utils.py)
 MESSAGE_SIZE_LIMIT = 750.*(1e6) #750 MB
 
 STREAMLIT_STATIC_PATH = pathlib.Path(st.__path__[0]) / "static"
