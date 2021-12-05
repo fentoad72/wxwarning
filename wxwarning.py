@@ -57,7 +57,7 @@ newdata = False
 newdata = True
 
 #streamlit message size
-MESSAGE_SIZE_LIMIT = 500.*int(1e6) #500 MB
+MESSAGE_SIZE_LIMIT = 750.*(1e6) #750 MB
 
 STREAMLIT_STATIC_PATH = pathlib.Path(st.__path__[0]) / "static"
 #st.write('STR_STATIC_PATH:',STREAMLIT_STATIC_PATH)
