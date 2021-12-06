@@ -61,6 +61,7 @@ MESSAGE_SIZE_LIMIT = 750.*(1e6) #750 MB
 
 STREAMLIT_STATIC_PATH = pathlib.Path(st.__path__[0]) / "static"
 #st.write('STR_STATIC_PATH:',STREAMLIT_STATIC_PATH)
+print('STREAMLIT_STATIC:',STREAMLIT_STATIC_PATH)
 
 # We create a downloads directory within the streamlit static asset directory
 # and we write output files to it
