@@ -62,6 +62,12 @@ MESSAGE_SIZE_LIMIT = 750.*(1e6) #750 MB
 STREAMLIT_STATIC_PATH = pathlib.Path(st.__path__[0]) / "static"
 #st.write('STR_STATIC_PATH:',STREAMLIT_STATIC_PATH)
 
+STREAMLIT_SERVER_PATH = pathlib.Path(st.__path__[0]) / "server"
+st.write('STR_SERVER_PATH:',STREAMLIT_SERVER_PATH)
+server_util = str(STREAMLIT_SERVER_PATH)+'/server_util.py'
+st.write(server_util)
+os.system("sed -i 's/MESSAGE_SIZE_LIMIT = 50/MESSAGE_SIZE_LIMIT = 200/g' server_util")
+
 # We create a downloads directory within the streamlit static asset directory
 # and we write output files to it
 DOWNLOADS_PATH = STREAMLIT_STATIC_PATH / "downloads"
