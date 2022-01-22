@@ -26,8 +26,8 @@ import random
 import json
 import requests
 import tarfile
-import wget
 import datetime as dt
+
 
 #st.write('loaded 9 modules')
 
@@ -66,7 +66,9 @@ STREAMLIT_SERVER_PATH = pathlib.Path(st.__path__[0]) / "server"
 st.write('STR_SERVER_PATH:',STREAMLIT_SERVER_PATH)
 server_util = str(STREAMLIT_SERVER_PATH)+'/server_util.py'
 st.write(server_util)
-os.system("sed -i 's/MESSAGE_SIZE_LIMIT = 50/MESSAGE_SIZE_LIMIT = 200/g' server_util")
+#os.system('set phrase = "MESSAGE_SIZE_LIMIT = 50"')
+#os.system('set replace = "MESSAGE_SIZE_LIMIT = 200"')
+#sed -i 's/50/200/g' server_util
 
 # We create a downloads directory within the streamlit static asset directory
 # and we write output files to it
@@ -80,6 +82,7 @@ if not DOWNLOADS_PATH.is_dir():
 #os.chdir('current_all')
 os.system('rm -rf ' + str(DOWNLOADS_PATH) + '/current_* ' + str(DOWNLOADS_PATH) + '/wget*')
 url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_all.tar.gz'
+#url='https://tgftp.nws.noaa.gov/SL.us008001/DF.sha/DC.cap/DS.WWA/current_warnings.tar.gz'
 #st.write('downloading NWS file')
 
 session = requests.Session()
@@ -91,8 +94,8 @@ if token:
     params = {'confirm':token}
     response = session.get(URL,params=params,stream=True)
 
+#destination =  str(DOWNLOADS_PATH)+'/current_all.tar.gz'
 destination =  str(DOWNLOADS_PATH)+'/current_all.tar.gz'
-
 #st.write(destination)
 
 save_response_content(response,destination)
@@ -116,8 +119,10 @@ wxdata.list(verbose=True)
 #st.write('contents:',wxdata.list(verbose=True))
 
 os.mkdir(str(DOWNLOADS_PATH)+'/current_all')
+#os.mkdir(str(DOWNLOADS_PATH)+'/current_warnings')
 
 wxdata.extractall(path=str(DOWNLOADS_PATH)+'/current_all/')
+#wxdata.extractall(path=str(DOWNLOADS_PATH)+'/current_warnings/')
 
 #os.remove(str(DOWNLOADS_PATH)+'/current_all.tar.gz')
 files = os.system('ls -l '+ str(DOWNLOADS_PATH))
@@ -135,13 +140,15 @@ timestamp = dt.datetime.now(dt.timezone.utc).isoformat(timespec='minutes')
 #Read in weather info
 
 infile = str(DOWNLOADS_PATH) + '/current_all/current_all.shp'
+#infile = str(DOWNLOADS_PATH) + '/current_warnings/current_warnings.shp'
+
 #st.write(infile)
 
 weatherdf = gpd.read_file(infile)
 
 #weatherdf = gpd.read_file('current_warnings/current_warnings.shp')
 
-weatherdf = weatherdf.drop(columns=['PHENOM','SIG','WFO','EVENT','ONSET','ENDS','CAP_ID','MSG_TYPE','VTEC'])
+#weatherdf = weatherdf.drop(columns=['PHENOM','SIG','WFO','EVENT','ONSET','ENDS','CAP_ID','MSG_TYPE','VTEC'])
 
 #st.write(weatherdf.head())
 
@@ -164,7 +171,7 @@ os.system('ls -lh')
 #so they will plot in different colors later
 
 wxwarnings = {}
-k = 0
+k = 5
 for w in weatherdf['PROD_TYPE'].unique():
     wxwarnings[w]=k
 #    print(w,k)
@@ -175,8 +182,8 @@ for w in weatherdf['PROD_TYPE'].unique():
 #Get min and max values of wxwarning id codes
 all_values = wxwarnings.values()
 
-max_wxwarnings = max(all_values)
-min_wxwarnings = min(all_values)
+max_wxwarnings = max(all_values) + 5
+min_wxwarnings = min(all_values) - 5
 
 #st.write('wxwarnings:',min_wxwarnings,max_wxwarnings)
 
@@ -194,6 +201,12 @@ weatherdf.isnull().sum().sum()
 #explicitly create an index column with each entry having a unique value for indexing
 weatherdf['UNIQUE_ID']=weatherdf.index
 
+#weatherdf_merge = weatherdf.dissolve(by=['PROD_TYPE','ONSET','ENDS'],aggfunc='first',as_index=False)
+weatherdf_merge = weatherdf.dissolve(by=['PROD_TYPE'],aggfunc='first',as_index=False)
+
+#weatherdf = weatherdf_merge 
+
+weatherdf['geometry']=weatherdf['geometry'].simplify(tolerance=0.1)
 #st.write(weatherdf.head(10))
 
 # write weatherdf to a geoJson file
