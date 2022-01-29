@@ -1,4 +1,4 @@
-# Program wxwarning
+#Program wxwarning
 # by Todd Arbetter (todd.e.arbetter@gmail.com)
 # Software Engineer, IXMap, Golden, CO
 
@@ -27,6 +27,8 @@ import json
 import requests
 import tarfile
 import datetime as dt
+from time import sleep
+import wget
 
 
 #st.write('loaded 9 modules')
@@ -63,9 +65,9 @@ STREAMLIT_STATIC_PATH = pathlib.Path(st.__path__[0]) / "static"
 #st.write('STR_STATIC_PATH:',STREAMLIT_STATIC_PATH)
 
 STREAMLIT_SERVER_PATH = pathlib.Path(st.__path__[0]) / "server"
-st.write('STR_SERVER_PATH:',STREAMLIT_SERVER_PATH)
+#st.write('STR_SERVER_PATH:',STREAMLIT_SERVER_PATH)
 server_util = str(STREAMLIT_SERVER_PATH)+'/server_util.py'
-st.write(server_util)
+#st.write(server_util)
 #os.system('set phrase = "MESSAGE_SIZE_LIMIT = 50"')
 #os.system('set replace = "MESSAGE_SIZE_LIMIT = 200"')
 #sed -i 's/50/200/g' server_util
@@ -92,13 +94,17 @@ token = get_confirm_token(response)
 
 if token:
     params = {'confirm':token}
-    response = session.get(URL,params=params,stream=True)
+    response = session.get(url,params=params,stream=True)
 
 #destination =  str(DOWNLOADS_PATH)+'/current_all.tar.gz'
 destination =  str(DOWNLOADS_PATH)+'/current_all.tar.gz'
 #st.write(destination)
 
-save_response_content(response,destination)
+#save_response_content(response,destination)
+
+#sleep(30)
+
+wget.download(url,str(DOWNLOADS_PATH))
 
 #st.write(destination)
 
@@ -202,11 +208,11 @@ weatherdf.isnull().sum().sum()
 weatherdf['UNIQUE_ID']=weatherdf.index
 
 #weatherdf_merge = weatherdf.dissolve(by=['PROD_TYPE','ONSET','ENDS'],aggfunc='first',as_index=False)
-weatherdf_merge = weatherdf.dissolve(by=['PROD_TYPE'],aggfunc='first',as_index=False)
+#weatherdf_merge = weatherdf.dissolve(by=['PROD_TYPE'],aggfunc='first',as_index=False)
 
 #weatherdf = weatherdf_merge 
 
-weatherdf['geometry']=weatherdf['geometry'].simplify(tolerance=0.1)
+weatherdf['geometry']=weatherdf['geometry'].simplify(tolerance=0.001)
 #st.write(weatherdf.head(10))
 
 # write weatherdf to a geoJson file
